@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Exp 3: Sneha Chukki | Personal Website</title>
+    
+    <!-- Internal CSS -->
+    <style>
+        /* Internal CSS - Modern Aesthetic Design */
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        .container {
+            max-width: 1300px;
+            margin: auto;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        /* Glass morphism effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 45px rgba(0,0,0,0.15);
+        }
+        
+        /* Navigation styling */
+        .nav-bar {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 50px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .nav-bar a {
+            color: #667eea;
+            text-decoration: none;
+            margin: 0 20px;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .nav-bar a:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: scale(1.05);
+        }
+        
+        /* Headings */
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 48px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        h2 {
+            font-size: 32px;
+            color: #667eea;
+            margin-bottom: 20px;
+            border-left: 5px solid #764ba2;
+            padding-left: 15px;
+        }
+        
+        h3 {
+            font-size: 24px;
+            color: #764ba2;
+            margin: 20px 0 10px 0;
+        }
+        
+        /* Profile image */
+        .profile-img {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .profile-img:hover {
+            transform: scale(1.05) rotate(5deg);
+        }
+        
+        /* Skills and Hobbies */
+        .skills-grid, .hobbies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .skill-card, .hobby-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 15px;
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .hobby-card {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .skill-card:hover, .hobby-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Project cards */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .project-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102,126,234,0.2);
+        }
+        
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(102,126,234,0.3);
+            border-color: #667eea;
+        }
+        
+        .project-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        .status-completed {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+        
+        .status-progress {
+            background: linear-gradient(135deg, #f2994a 0%, #f2c94c 100%);
+            color: white;
+        }
+        
+        /* Form styling */
+        .modern-form {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 30px;
+            border-radius: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+        }
+        
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+        
+        /* Table styling */
+        .css-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .css-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .css-table td {
+            padding: 12px;
+            text-align: center;
+            background: white;
+        }
+        
+        .css-table tr:hover td {
+            background: #f0f0f0;
+        }
+        
+        /* Footer */
+        .footer {
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+        }
+        
+        .social-links {
+            margin: 20px 0;
+        }
+        
+        .social-links a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 24px;
+            transition: color 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            color: #667eea;
+        }
+        
+        /* Animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .glass-card {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .gradient-text {
+                font-size: 32px;
+            }
+            .nav-bar a {
+                margin: 0 10px;
+                font-size: 14px;
+            }
+        }
+    </style>
+    
+    <!-- External CSS -->
+    <link rel="stylesheet" href="style.css">
+    
+</head>
+<body>
+
+<div class="container">
+    
+    <!-- Navigation Bar -->
+    <div class="nav-bar">
+        <h2 style="display: inline-block; margin-right: 30px;">✨ Sneha's World ✨</h2>
+        <a href="#home">🏠 Home</a>
+        <a href="#about">👤 About Me</a>
+        <a href="#projects">📁 Projects</a>
+        <a href="#contact">📞 Contact</a>
+    </div>
+
+    <!-- Home Section -->
+    <div class="glass-card" id="home">
+        <h1 class="gradient-text">Welcome to My Creative Space! 🎨</h1>
+        
+        <!-- Inline CSS for special effect -->
+        <p style="text-align: center; font-size: 20px; color: #555; margin-bottom: 20px;">
+            Hi! I'm <strong style="background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; background-clip: text; color: transparent;">Sneha Chukki</strong>, 
+            a passionate Web Technology Student
+        </p>
+        
+        <div style="background: linear-gradient(135deg, #ffe6f0 0%, #ffd9e6 100%); padding: 25px; border-radius: 15px; text-align: center;">
+            <p style="font-size: 18px;">✨ This is <strong style="color: #764ba2;">Experiment 3</strong> - Mastering Inline, Internal & External CSS ✨</p>
+            <p style="margin-top: 10px;">Creating beautiful, responsive, and modern web experiences</p>
+        </div>
+        
+        <div style="margin-top: 30px;">
+            <h3>🌟 What makes this site special?</h3>
+            <ul style="margin-left: 30px; margin-top: 15px;">
+                <li>✨ <span style="color: #667eea; font-weight: bold;">Glass morphism</span> design effect</li>
+                <li>🎨 <span style="color: #764ba2; font-weight: bold;">Gradient backgrounds</span> and modern colors</li>
+                <li>💫 <span style="color: #f5576c; font-weight: bold;">Smooth animations</span> and hover effects</li>
+                <li>📱 <span style="color: #4facfe; font-weight: bold;">Responsive design</span> that works on all devices</li>
+                <li>🎯 <span style="color: #11998e; font-weight: bold;">All 3 CSS types</span> working together beautifully</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <div class="glass-card" id="about">
+        <h2>🌸 About Me</h2>
+        
+        <!-- Image with inline CSS -->
+        <img src="images/myphoto" alt="Sneha Chukki" 
+             style="width: 250px; height: 250px; border-radius: 50%; object-fit: cover; border: 5px solid white; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: block; margin: 0 auto 20px auto;">
+        
+        <div style="text-align: center; margin-bottom: 30px;">
+            <p><strong>Name:</strong> <span style="color: #764ba2; font-size: 20px;">Sneha Chukki</span></p>
+            <p><strong>Course:</strong> Web Technology | <strong>Year:</strong> 2nd Year</p>
+            <p><strong>Passion:</strong> Creating beautiful and functional websites</p>
+        </div>
+        
+        <h3>💪 My Skills</h3>
+        <div class="skills-grid">
+            <div class="skill-card">📝 HTML5</div>
+            <div class="skill-card">🎨 CSS3</div>
+            <div class="skill-card">⚡ JavaScript</div>
+            <div class="skill-card">🎯 Responsive Design</div>
+            <div class="skill-card">💡 UI/UX Basics</div>
+            <div class="skill-card">🔧 Problem Solving</div>
+        </div>
+        
+        <h3>🎯 My Hobbies</h3>
+        <div class="hobbies-grid">
+            <div class="hobby-card">💻 Coding</div>
+            <div class="hobby-card">📚 Reading Tech Blogs</div>
+            <div class="hobby-card">🎨 UI/UX Designing</div>
+            <div class="hobby-card">🚀 Learning New Tech</div>
+        </div>
+        
+        <div style="background: linear-gradient(135deg, #ffe6e6 0%, #ffe0f0 100%); padding: 20px; border-radius: 15px; margin-top: 20px;">
+            <p style="text-align: center; font-style: italic;">
+                "Turning coffee into code and dreams into websites 💫"
+            </p>
+        </div>
+    </div>
+
+    <!-- Projects Section -->
+    <div class="glass-card" id="projects">
+        <h2>📂 My Creative Projects</h2>
+        
+        <div class="projects-grid">
+            <!-- Project 1 -->
+            <div class="project-card">
+                <div class="project-icon">🌐</div>
+                <h3>Personal Website</h3>
+                <p>First project using basic HTML tags. A complete personal portfolio.</p>
+                <span class="status-badge status-completed">✓ Completed</span>
+            </div>
+            
+            <!-- Project 2 -->
+            <div class="project-card">
+                <div class="project-icon">🛍️</div>
+                <h3>E-commerce Store</h3>
+                <p>Cosmetics e-commerce website with advanced HTML tables and forms.</p>
+                <span class="status-badge status-completed">✓ Completed</span>
+            </div>
+            
+            <!-- Project 3 -->
+            <div class="project-card">
+                <div class="project-icon">🎨</div>
+                <h3>CSS Masterpiece</h3>
+                <p>Beautiful website using Inline, Internal & External CSS techniques.</p>
+                <span class="status-badge status-progress">⚡ In Progress</span>
+            </div>
+        </div>
+        
+        <!-- Inline CSS example -->
+        <div style="background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%); padding: 20px; border-radius: 15px; margin-top: 20px; text-align: center;">
+            <p><strong>🎯 Upcoming:</strong> JavaScript Projects, React Applications, Full Stack Development</p>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div class="glass-card" id="contact">
+        <h2>📬 Let's Connect!</h2>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+            <!-- Contact Info -->
+            <div>
+                <h3>📞 Get in Touch</h3>
+                <p style="margin: 15px 0;">📧 <strong>Email:</strong> snehachukki91@gmail.com</p>
+                <p style="margin: 15px 0;">📱 <strong>Phone:</strong> 8431702598</p>
+                <p style="margin: 15px 0;">📍 <strong>Address:</strong> Jain University, Bangalore</p>
+                
+                <div style="margin-top: 30px;">
+                    <h3>⏰ Availability</h3>
+                    <p>Monday - Friday: 10 AM - 6 PM</p>
+                    <p>Saturday: 10 AM - 2 PM</p>
+                    <p>Sunday: Closed</p>
+                </div>
+            </div>
+            
+            <!-- Contact Form -->
+            <div>
+                <h3>✉️ Send a Message</h3>
+                <form class="modern-form">
+                    <div class="form-group">
+                        <label>Your Name</label>
+                        <input type="text" placeholder="Enter your name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" placeholder="your@email.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Message</label>
+                        <textarea rows="4" placeholder="What would you like to say?"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">✨ Send Message</button>
+                    <button type="reset" class="btn btn-secondary">🗑️ Clear</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- CSS Types Comparison Table -->
+    <div class="glass-card">
+        <h2>🎨 CSS Techniques Used</h2>
+        
+        <table class="css-table">
+            <thead>
+                <tr>
+                    <th>CSS Type</th>
+                    <th>Priority</th>
+                    <th>Where Used</th>
+                    <th>Examples</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong style="color: #ff6b6b;">🔴 Inline CSS</strong></td>
+                    <td>Highest (1000)</td>
+                    <td>Inside style attribute</td>
+                    <td>Colors, borders, image styling, button colors</td>
+                </tr>
+                <tr>
+                    <td><strong style="color: #4caf50;">🟢 Internal CSS</strong></td>
+                    <td>Medium (100)</td>
+                    <td>&lt;style&gt; tag in head</td>
+                    <td>Glass cards, gradients, animations, hover effects</td>
+                </tr>
+                <tr>
+                    <td><strong style="color: #2196f3;">🔵 External CSS</strong></td>
+                    <td>Lowest (1)</td>
+                    <td>style.css file</td>
+                    <td>Body background, base styles, font families</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div style="margin-top: 20px; padding: 15px; background: #f0f0f0; border-radius: 10px;">
+            <p><strong>💡 CSS Specificity Rule:</strong> Inline > Internal > External</p>
+            <p>Inline CSS overrides all, perfect for unique elements. Internal CSS for page-specific styles. External CSS for consistent styling across multiple pages.</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <h3 style="color: white;">✨ Sneha Chukki ✨</h3>
+        <p>Web Technology Lab | Experiment 3</p>
+        
+        <div class="social-links">
+            <a href="#">📷</a>
+            <a href="#">📘</a>
+            <a href="#">🐦</a>
+            <a href="#">💼</a>
+        </div>
+        
+        <p style="margin-top: 20px;">
+            &copy; 2024 | Created with 💜 using Inline, Internal & External CSS
+        </p>
+        <p style="font-size: 12px; margin-top: 10px;">
+            "Design is not just what it looks like, but how it works"
+        </p>
+    </div>
+
+</div>
+
+</body>
+</html>
