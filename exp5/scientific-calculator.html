@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Exp 5: Scientific Calculator | Sneha Chukki</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .calculator-wrapper {
+            max-width: 600px;
+            width: 100%;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .calculator-container {
+            background: #1a1a2e;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .calculator-screen {
+            background: #0f0f1a;
+            color: #00ff88;
+            font-size: 28px;
+            padding: 20px;
+            text-align: right;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            font-family: 'Courier New', monospace;
+            min-height: 90px;
+            word-wrap: break-word;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+            letter-spacing: 2px;
+        }
+        
+        .memory-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .memory-btn {
+            padding: 12px;
+            background: #16213e;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .memory-btn:hover {
+            background: #0f3460;
+            transform: translateY(-2px);
+        }
+        
+        .calculator-buttons {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+        
+        .calc-btn {
+            padding: 15px;
+            font-size: 16px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .calc-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .calc-btn.number {
+            background: #e94560;
+            color: white;
+        }
+        
+        .calc-btn.operator {
+            background: #ff6b6b;
+            color: white;
+        }
+        
+        .calc-btn.scientific {
+            background: #4ecdc4;
+            color: #1a1a2e;
+        }
+        
+        .calc-btn.equals {
+            background: #00d9ff;
+            color: #1a1a2e;
+            grid-column: span 2;
+        }
+        
+        .calc-btn.clear {
+            background: #ff4757;
+            color: white;
+        }
+        
+        .calc-btn.backspace {
+            background: #ffa502;
+            color: white;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: white;
+            font-size: 12px;
+        }
+        
+        .shortcuts {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+        
+        .shortcut {
+            font-size: 11px;
+            color: #ddd;
+        }
+        
+        .shortcut kbd {
+            background: #333;
+            padding: 2px 6px;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+        
+        @media (max-width: 550px) {
+            .calculator-buttons {
+                gap: 8px;
+            }
+            .calc-btn {
+                padding: 10px;
+                font-size: 12px;
+            }
+            .calculator-screen {
+                font-size: 20px;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="calculator-wrapper">
+    <div class="header">
+        <h1>🔬 Scientific Calculator</h1>
+        <p>Experiment 5 | Web Technology Lab</p>
+    </div>
+    
+    <div class="calculator-container">
+        <!-- Memory Buttons -->
+        <div class="memory-buttons">
+            <button class="memory-btn" onclick="memoryStore()">💾 MS (Store)</button>
+            <button class="memory-btn" onclick="memoryRecall()">📋 MR (Recall)</button>
+            <button class="memory-btn" onclick="memoryClear()">🗑️ MC (Clear)</button>
+        </div>
+        
+        <!-- Calculator Screen -->
+        <div class="calculator-screen" id="screen">
+            0
+        </div>
+        
+        <!-- Calculator Buttons -->
+        <div class="calculator-buttons">
+            <button class="calc-btn clear" onclick="clearScreen()">C</button>
+            <button class="calc-btn backspace" onclick="backspace()">⌫</button>
+            <button class="calc-btn scientific" onclick="addToScreen('(')">(</button>
+            <button class="calc-btn scientific" onclick="addToScreen(')')">)</button>
+            <button class="calc-btn operator" onclick="addToScreen('/')">÷</button>
+            
+            <button class="calc-btn scientific" onclick="calculateSin()">sin</button>
+            <button class="calc-btn scientific" onclick="calculateCos()">cos</button>
+            <button class="calc-btn scientific" onclick="calculateTan()">tan</button>
+            <button class="calc-btn scientific" onclick="calculateLn()">ln</button>
+            <button class="calc-btn operator" onclick="addToScreen('*')">×</button>
+            
+            <button class="calc-btn scientific" onclick="calculateASin()">sin⁻¹</button>
+            <button class="calc-btn scientific" onclick="calculateACos()">cos⁻¹</button>
+            <button class="calc-btn scientific" onclick="calculateATan()">tan⁻¹</button>
+            <button class="calc-btn scientific" onclick="calculateLog()">log</button>
+            <button class="calc-btn operator" onclick="addToScreen('-')">-</button>
+            
+            <button class="calc-btn number" onclick="addToScreen('7')">7</button>
+            <button class="calc-btn number" onclick="addToScreen('8')">8</button>
+            <button class="calc-btn number" onclick="addToScreen('9')">9</button>
+            <button class="calc-btn scientific" onclick="calculateSquare()">x²</button>
+            <button class="calc-btn operator" onclick="addToScreen('+')">+</button>
+            
+            <button class="calc-btn number" onclick="addToScreen('4')">4</button>
+            <button class="calc-btn number" onclick="addToScreen('5')">5</button>
+            <button class="calc-btn number" onclick="addToScreen('6')">6</button>
+            <button class="calc-btn scientific" onclick="calculateSqrt()">√x</button>
+            <button class="calc-btn scientific" onclick="calculatePower()">xʸ</button>
+            
+            <button class="calc-btn number" onclick="addToScreen('1')">1</button>
+            <button class="calc-btn number" onclick="addToScreen('2')">2</button>
+            <button class="calc-btn number" onclick="addToScreen('3')">3</button>
+            <button class="calc-btn scientific" onclick="calculateExp()">eˣ</button>
+            <button class="calc-btn scientific" onclick="calculatePi()">π</button>
+            
+            <button class="calc-btn number" onclick="addToScreen('0')">0</button>
+            <button class="calc-btn number" onclick="addToScreen('.')">.</button>
+            <button class="calc-btn scientific" onclick="calculateFactorial()">n!</button>
+            <button class="calc-btn scientific" onclick="calculatePercentage()">%</button>
+            <button class="calc-btn equals" onclick="calculateResult()">=</button>
+        </div>
+    </div>
+    
+    <div class="shortcuts">
+        <span class="shortcut"><kbd>0-9</kbd> Numbers</span>
+        <span class="shortcut"><kbd>+ - * /</kbd> Operations</span>
+        <span class="shortcut"><kbd>Enter</kbd> Calculate</span>
+        <span class="shortcut"><kbd>Escape</kbd> Clear</span>
+        <span class="shortcut"><kbd>Backspace</kbd> Delete</span>
+    </div>
+    
+    <div class="footer">
+        <p>Created by Sneha Chukki | Web Technology Lab - Experiment 5</p>
+        <p>📐 Trigonometric | 📊 Logarithmic | 🔢 Factorial | 💾 Memory Functions</p>
+    </div>
+</div>
+
+<script>
+    let currentScreen = document.getElementById('screen');
+    let memoryValue = 0;
+    let powerMode = false;
+    let powerBase = 0;
+    
+    // Add to screen
+    function addToScreen(value) {
+        if (currentScreen.innerText === '0' && value !== '.') {
+            currentScreen.innerText = value;
+        } else if (powerMode) {
+            // Handle power function
+            powerMode = false;
+            currentScreen.innerText = Math.pow(powerBase, parseFloat(value));
+        } else {
+            currentScreen.innerText += value;
+        }
+    }
+    
+    // Clear screen
+    function clearScreen() {
+        currentScreen.innerText = '0';
+        powerMode = false;
+    }
+    
+    // Backspace
+    function backspace() {
+        if (currentScreen.innerText.length === 1) {
+            currentScreen.innerText = '0';
+        } else {
+            currentScreen.innerText = currentScreen.innerText.slice(0, -1);
+        }
+    }
+    
+    // Calculate result
+    function calculateResult() {
+        try {
+            let expression = currentScreen.innerText;
+            expression = expression.replace(/×/g, '*').replace(/÷/g, '/');
+            let result = eval(expression);
+            
+            // Round to 10 decimal places if needed
+            if (typeof result === 'number' && !Number.isInteger(result)) {
+                result = parseFloat(result.toFixed(10));
+            }
+            currentScreen.innerText = result;
+        } catch (error) {
+            currentScreen.innerText = 'Error';
+            setTimeout(() => {
+                currentScreen.innerText = '0';
+            }, 1500);
+        }
+    }
+    
+    // Trigonometric functions (in degrees)
+    function calculateSin() {
+        let value = parseFloat(currentScreen.innerText);
+        let result = Math.sin(value * Math.PI / 180);
+        currentScreen.innerText = result;
+    }
+    
+    function calculateCos() {
+        let value = parseFloat(currentScreen.innerText);
+        let result = Math.cos(value * Math.PI / 180);
+        currentScreen.innerText = result;
+    }
+    
+    function calculateTan() {
+        let value = parseFloat(currentScreen.innerText);
+        let result = Math.tan(value * Math.PI / 180);
+        currentScreen.innerText = result;
+    }
+    
+    // Inverse trigonometric functions (returns degrees)
+    function calculateASin() {
+        let value = parseFloat(currentScreen.innerText);
+        if (value >= -1 && value <= 1) {
+            let result = Math.asin(value) * 180 / Math.PI;
+            currentScreen.innerText = result;
+        } else {
+            currentScreen.innerText = 'Error';
+            setTimeout(() => {
+                currentScreen.innerText = '0';
+            }, 1500);
+        }
+    }
+    
+    function calculateACos() {
+        let value = parseFloat(currentScreen.innerText);
+        if (value >= -1 && value <= 1) {
+            let result = Math.acos(value) * 180 / Math.PI;
+            currentScreen.innerText = result;
+        } else {
+            currentScreen.innerText = 'Error';
+            setTimeout(() => {
+                currentScreen.innerText = '0';
+            }, 1500);
+        }
+    }
+    
+    function calculateATan() {
+        let value = parseFloat(currentScreen.innerText);
+        let result = Math.atan(value) * 180 / Math.PI;
+        currentScreen.innerText = result;
+    }
+    
+    // Logarithmic functions
+    function calculateLog() {
+        let value = parseFloat(currentScreen.innerText);
+        if (value > 0) {
+            let result = Math.log10(value);
+            currentScreen.innerText = result;
+        } else {
+            currentScreen.innerText = 'Error';
+            setTimeout(() => {
+                currentScreen.innerText = '0';
+            }, 1500);
+        }
+    }
+    
+    function calculateLn() {
+        let value = parseFloat(currentScreen.innerText);
+        if (value > 0) {
+            let result = Math.log(value);
+            currentScreen.innerText = result;
+        } else {
+            currentScreen.innerText = 'Error';
+            setTimeout(() => {
+                currentScreen.innerText = '0';
+            }, 1500);
+        }
+    }
+    
+    // Square and square root
+    function calculateSquare() {
+        let value = parseFloat(currentScreen.innerText);
+        let result = Math.pow(value, 2);
+        currentScreen.innerText = result;
+    }
+    
+    function calculateSqrt() {
+        let value = parseFloat(currentScreen.innerText);
+        if (value >= 0) {
+            let result = Math.sqrt(value);
+            currentScreen.innerText = result;
+        } else {
+            currentScreen.innerText = 'Error';
+            setTimeout(() => {
+                currentScreen.innerText = '0';
+            }, 1500);
+        }
+    }
+    
+    // Power function
+    function calculatePower() {
+        powerBase = parseFloat(currentScreen.innerText);
+        powerMode = true;
+        currentScreen.innerText = '^';
+        setTimeout(() => {
+            currentScreen.innerText = '0';
+        }, 100);
+    }
+    
+    // Exponential function
+    function calculateExp() {
+        let value = parseFloat(currentScreen.innerText);
+        let result = Math.exp(value);
+        currentScreen.innerText = result;
+    }
+    
+    // Pi constant
+    function calculatePi() {
+        currentScreen.innerText = Math.PI;
+    }
+    
+    // Factorial function
+    function calculateFactorial() {
+        let value = parseFloat(currentScreen.innerText);
+        if (value >= 0 && Number.isInteger(value) && value <= 170) {
+            let result = 1;
+            for (let i = 2; i <= value; i++) {
+                result *= i;
+            }
+            currentScreen.innerText = result;
+        } else {
+            currentScreen.innerText = 'Error';
+            setTimeout(() => {
+                currentScreen.innerText = '0';
+            }, 1500);
+        }
+    }
+    
+    // Percentage
+    function calculatePercentage() {
+        let value = parseFloat(currentScreen.innerText);
+        let result = value / 100;
+        currentScreen.innerText = result;
+    }
+    
+    // Memory functions
+    function memoryStore() {
+        memoryValue = parseFloat(currentScreen.innerText);
+        showToast('✓ Stored: ' + memoryValue);
+    }
+    
+    function memoryRecall() {
+        currentScreen.innerText = memoryValue;
+        showToast('📋 Recalled: ' + memoryValue);
+    }
+    
+    function memoryClear() {
+        memoryValue = 0;
+        showToast('🗑️ Memory cleared');
+    }
+    
+    // Toast notification
+    function showToast(message) {
+        let toast = document.createElement('div');
+        toast.innerHTML = message;
+        toast.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            z-index: 1000;
+            animation: fadeOut 1.5s ease-out;
+        `;
+        document.body.appendChild(toast);
+        setTimeout(() => {
+            toast.remove();
+        }, 1500);
+    }
+    
+    // Keyboard support
+    document.addEventListener('keydown', function(event) {
+        if (event.key >= '0' && event.key <= '9') {
+            addToScreen(event.key);
+        } else if (event.key === '.') {
+            addToScreen('.');
+        } else if (event.key === '+' || event.key === '-' || event.key === '*' || event.key === '/') {
+            addToScreen(event.key);
+        } else if (event.key === 'Enter') {
+            event.preventDefault();
+            calculateResult();
+        } else if (event.key === 'Escape') {
+            clearScreen();
+        } else if (event.key === 'Backspace') {
+            backspace();
+        }
+    });
+</script>
+
+</body>
+</html>

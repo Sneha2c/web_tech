@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Exp 6: Registration & Login System | Sneha Chukki</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .header h1 {
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        
+        .forms-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .form-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+        }
+        
+        .form-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .form-card h2 {
+            color: #667eea;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 28px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+        }
+        
+        .form-group input.error {
+            border-color: #ff4757;
+        }
+        
+        .error-message {
+            color: #ff4757;
+            font-size: 12px;
+            margin-top: 5px;
+            display: block;
+        }
+        
+        .success-message {
+            color: #00b894;
+            font-size: 12px;
+            margin-top: 5px;
+            display: block;
+        }
+        
+        .password-strength {
+            margin-top: 8px;
+            height: 5px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .strength-weak {
+            background: #ff4757;
+            width: 33%;
+        }
+        
+        .strength-medium {
+            background: #ffa502;
+            width: 66%;
+        }
+        
+        .strength-strong {
+            background: #00b894;
+            width: 100%;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+        }
+        
+        .btn-secondary {
+            background: #dfe6e9;
+            color: #2d3436;
+        }
+        
+        .btn-secondary:hover {
+            background: #b2bec3;
+        }
+        
+        .toggle-form {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .toggle-form a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .toggle-form a:hover {
+            text-decoration: underline;
+        }
+        
+        .user-info {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .show-password {
+            margin-top: 5px;
+            font-size: 12px;
+        }
+        
+        .show-password input {
+            width: auto;
+            margin-right: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .forms-container {
+                grid-template-columns: 1fr;
+            }
+            .header h1 {
+                font-size: 32px;
+            }
+        }
+        
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #333;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .toast.success {
+            background: #00b894;
+        }
+        
+        .toast.error {
+            background: #ff4757;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>🔐 Glamora Account System</h1>
+        <p>Create an account or login to access your beauty profile</p>
+    </div>
+    
+    <div class="forms-container">
+        
+        <!-- Registration Form -->
+        <div class="form-card" id="registrationForm">
+            <h2>📝 Register</h2>
+            <form id="registerForm" onsubmit="return false;">
+                <div class="form-group">
+                    <label>Full Name *</label>
+                    <input type="text" id="regName" placeholder="Enter your full name">
+                    <span class="error-message" id="regNameError"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label>Email Address *</label>
+                    <input type="email" id="regEmail" placeholder="Enter your email">
+                    <span class="error-message" id="regEmailError"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label>Phone Number *</label>
+                    <input type="tel" id="regPhone" placeholder="10-digit mobile number">
+                    <span class="error-message" id="regPhoneError"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label>Password *</label>
+                    <input type="password" id="regPassword" placeholder="Create a password">
+                    <div class="password-strength" id="passwordStrength"></div>
+                    <span class="error-message" id="regPasswordError"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label>Confirm Password *</label>
+                    <input type="password" id="regConfirmPassword" placeholder="Confirm your password">
+                    <span class="error-message" id="regConfirmError"></span>
+                </div>
+                
+                <div class="form-group show-password">
+                    <input type="checkbox" id="showRegPassword" onclick="togglePassword('reg')">
+                    <label>Show Password</label>
+                </div>
+                
+                <button type="button" class="btn btn-primary" onclick="validateRegistration()">Create Account</button>
+                <button type="reset" class="btn btn-secondary" onclick="resetRegistrationForm()">Clear</button>
+            </form>
+            
+            <div class="toggle-form">
+                <p>Already have an account? <a onclick="showLogin()">Login here</a></p>
+            </div>
+        </div>
+        
+        <!-- Login Form -->
+        <div class="form-card" id="loginForm">
+            <h2>🔑 Login</h2>
+            <form id="loginFormElement" onsubmit="return false;">
+                <div class="form-group">
+                    <label>Email Address *</label>
+                    <input type="email" id="loginEmail" placeholder="Enter your email">
+                    <span class="error-message" id="loginEmailError"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label>Password *</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password">
+                    <span class="error-message" id="loginPasswordError"></span>
+                </div>
+                
+                <div class="form-group show-password">
+                    <input type="checkbox" id="showLoginPassword" onclick="togglePassword('login')">
+                    <label>Show Password</label>
+                </div>
+                
+                <button type="button" class="btn btn-primary" onclick="validateLogin()">Login</button>
+                <button type="reset" class="btn btn-secondary" onclick="resetLoginForm()">Clear</button>
+            </form>
+            
+            <div class="toggle-form">
+                <p>Don't have an account? <a onclick="showRegister()">Register here</a></p>
+            </div>
+        </div>
+        
+    </div>
+    
+    <!-- User Dashboard (shown after login) -->
+    <div id="userDashboard" class="form-card hidden" style="margin-top: 30px;">
+        <h2>👤 Welcome, <span id="userName"></span>!</h2>
+        <div class="user-info">
+            <p>✨ You have successfully logged into Glamora! ✨</p>
+            <p>📧 Email: <span id="userEmail"></span></p>
+            <p>📞 Phone: <span id="userPhone"></span></p>
+        </div>
+        <button class="btn btn-primary" onclick="logout()" style="margin-top: 20px;">🚪 Logout</button>
+    </div>
+</div>
+
+<script>
+    // Store registered users in localStorage
+    let users = JSON.parse(localStorage.getItem('users')) || [];
+    
+    // Show/Hide forms on page load
+    document.getElementById('loginForm').style.display = 'block';
+    document.getElementById('registrationForm').style.display = 'block';
+    
+    function showLogin() {
+        document.getElementById('registrationForm').style.display = 'none';
+        document.getElementById('loginForm').style.display = 'block';
+        document.getElementById('userDashboard').classList.add('hidden');
+        resetLoginForm();
+    }
+    
+    function showRegister() {
+        document.getElementById('registrationForm').style.display = 'block';
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('userDashboard').classList.add('hidden');
+        resetRegistrationForm();
+    }
+    
+    // Toggle password visibility
+    function togglePassword(formType) {
+        if (formType === 'reg') {
+            const passwordField = document.getElementById('regPassword');
+            const confirmField = document.getElementById('regConfirmPassword');
+            const checkbox = document.getElementById('showRegPassword');
+            const type = checkbox.checked ? 'text' : 'password';
+            passwordField.type = type;
+            confirmField.type = type;
+        } else if (formType === 'login') {
+            const passwordField = document.getElementById('loginPassword');
+            const checkbox = document.getElementById('showLoginPassword');
+            passwordField.type = checkbox.checked ? 'text' : 'password';
+        }
+    }
+    
+    // Password strength checker
+    document.getElementById('regPassword')?.addEventListener('input', function() {
+        const password = this.value;
+        const strengthDiv = document.getElementById('passwordStrength');
+        
+        let strength = 0;
+        if (password.length >= 8) strength++;
+        if (password.match(/[a-z]/)) strength++;
+        if (password.match(/[A-Z]/)) strength++;
+        if (password.match(/[0-9]/)) strength++;
+        if (password.match(/[^a-zA-Z0-9]/)) strength++;
+        
+        strengthDiv.className = 'password-strength';
+        if (strength <= 2) {
+            strengthDiv.classList.add('strength-weak');
+        } else if (strength <= 4) {
+            strengthDiv.classList.add('strength-medium');
+        } else {
+            strengthDiv.classList.add('strength-strong');
+        }
+    });
+    
+    // Validate Registration
+    function validateRegistration() {
+        let isValid = true;
+        
+        // Get values
+        const name = document.getElementById('regName').value.trim();
+        const email = document.getElementById('regEmail').value.trim();
+        const phone = document.getElementById('regPhone').value.trim();
+        const password = document.getElementById('regPassword').value;
+        const confirmPassword = document.getElementById('regConfirmPassword').value;
+        
+        // Clear previous errors
+        clearRegistrationErrors();
+        
+        // Validate Name
+        if (name === '') {
+            showError('regNameError', 'Full name is required');
+            isValid = false;
+        } else if (name.length < 3) {
+            showError('regNameError', 'Name must be at least 3 characters');
+            isValid = false;
+        } else if (!/^[a-zA-Z\s]+$/.test(name)) {
+            showError('regNameError', 'Name can only contain letters');
+            isValid = false;
+        }
+        
+        // Validate Email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (email === '') {
+            showError('regEmailError', 'Email is required');
+            isValid = false;
+        } else if (!emailRegex.test(email)) {
+            showError('regEmailError', 'Enter a valid email address');
+            isValid = false;
+        } else if (users.some(user => user.email === email)) {
+            showError('regEmailError', 'Email already registered');
+            isValid = false;
+        }
+        
+        // Validate Phone
+        const phoneRegex = /^[6-9]\d{9}$/;
+        if (phone === '') {
+            showError('regPhoneError', 'Phone number is required');
+            isValid = false;
+        } else if (!phoneRegex.test(phone)) {
+            showError('regPhoneError', 'Enter a valid 10-digit mobile number');
+            isValid = false;
+        }
+        
+        // Validate Password
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (password === '') {
+            showError('regPasswordError', 'Password is required');
+            isValid = false;
+        } else if (password.length < 8) {
+            showError('regPasswordError', 'Password must be at least 8 characters');
+            isValid = false;
+        } else if (!passwordRegex.test(password)) {
+            showError('regPasswordError', 'Password must contain uppercase, lowercase, number & special character');
+            isValid = false;
+        }
+        
+        // Validate Confirm Password
+        if (confirmPassword === '') {
+            showError('regConfirmError', 'Please confirm your password');
+            isValid = false;
+        } else if (password !== confirmPassword) {
+            showError('regConfirmError', 'Passwords do not match');
+            isValid = false;
+        }
+        
+        if (isValid) {
+            // Save user
+            const newUser = {
+                name: name,
+                email: email,
+                phone: phone,
+                password: password
+            };
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            showToast('Registration Successful! Please login.', 'success');
+            resetRegistrationForm();
+            showLogin();
+        }
+    }
+    
+    // Validate Login
+    function validateLogin() {
+        const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value;
+        
+        clearLoginErrors();
+        
+        let isValid = true;
+        
+        if (email === '') {
+            showError('loginEmailError', 'Email is required');
+            isValid = false;
+        }
+        
+        if (password === '') {
+            showError('loginPasswordError', 'Password is required');
+            isValid = false;
+        }
+        
+        if (isValid) {
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                showToast('Login Successful! Welcome back!', 'success');
+                showDashboard(user);
+            } else {
+                showError('loginEmailError', 'Invalid email or password');
+                showToast('Invalid credentials! Please try again.', 'error');
+            }
+        }
+    }
+    
+    // Show Dashboard
+    function showDashboard(user) {
+        document.getElementById('registrationForm').style.display = 'none';
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('userDashboard').classList.remove('hidden');
+        document.getElementById('userName').innerText = user.name;
+        document.getElementById('userEmail').innerText = user.email;
+        document.getElementById('userPhone').innerText = user.phone;
+    }
+    
+    // Logout
+    function logout() {
+        document.getElementById('registrationForm').style.display = 'block';
+        document.getElementById('loginForm').style.display = 'block';
+        document.getElementById('userDashboard').classList.add('hidden');
+        resetLoginForm();
+        showToast('Logged out successfully!', 'success');
+    }
+    
+    // Helper Functions
+    function showError(elementId, message) {
+        const element = document.getElementById(elementId);
+        element.innerText = message;
+        element.style.display = 'block';
+        
+        // Highlight the input field
+        const input = element.previousElementSibling;
+        if (input && input.tagName === 'INPUT') {
+            input.classList.add('error');
+        }
+    }
+    
+    function clearRegistrationErrors() {
+        const errorIds = ['regNameError', 'regEmailError', 'regPhoneError', 'regPasswordError', 'regConfirmError'];
+        errorIds.forEach(id => {
+            const element = document.getElementById(id);
+            element.innerText = '';
+            element.style.display = 'none';
+        });
+        
+        // Remove error class from inputs
+        const inputs = document.querySelectorAll('#registrationForm input');
+        inputs.forEach(input => input.classList.remove('error'));
+    }
+    
+    function clearLoginErrors() {
+        const errorIds = ['loginEmailError', 'loginPasswordError'];
+        errorIds.forEach(id => {
+            const element = document.getElementById(id);
+            element.innerText = '';
+            element.style.display = 'none';
+        });
+        
+        const inputs = document.querySelectorAll('#loginFormElement input');
+        inputs.forEach(input => input.classList.remove('error'));
+    }
+    
+    function resetRegistrationForm() {
+        document.getElementById('registerForm').reset();
+        clearRegistrationErrors();
+        document.getElementById('passwordStrength').className = 'password-strength';
+    }
+    
+    function resetLoginForm() {
+        document.getElementById('loginFormElement').reset();
+        clearLoginErrors();
+    }
+    
+    function showToast(message, type) {
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.innerText = message;
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.remove();
+        }, 3000);
+    }
+    
+    // Live validation for registration form
+    document.getElementById('regName')?.addEventListener('input', function() {
+        if (this.value.trim().length >= 3) {
+            document.getElementById('regNameError').innerText = '';
+            this.classList.remove('error');
+        }
+    });
+    
+    document.getElementById('regEmail')?.addEventListener('input', function() {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (emailRegex.test(this.value.trim())) {
+            document.getElementById('regEmailError').innerText = '';
+            this.classList.remove('error');
+        }
+    });
+    
+    document.getElementById('regPhone')?.addEventListener('input', function() {
+        const phoneRegex = /^[6-9]\d{9}$/;
+        if (phoneRegex.test(this.value.trim())) {
+            document.getElementById('regPhoneError').innerText = '';
+            this.classList.remove('error');
+        }
+    });
+    
+    // Check if user is already logged in (optional)
+    // Check for stored session
+</script>
+
+</body>
+</html>

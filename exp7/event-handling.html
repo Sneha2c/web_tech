@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Exp 7: Event Handling | Personal & E-commerce Website</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .header h1 {
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        
+        .events-demo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .event-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .event-card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .event-card h3 {
+            color: #764ba2;
+            margin: 20px 0 10px 0;
+        }
+        
+        .demo-area {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .interactive-element {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 10px 0;
+        }
+        
+        .interactive-element:hover {
+            transform: scale(1.02);
+        }
+        
+        .event-log {
+            background: #2c3e50;
+            color: #00ff88;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 14px;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+        
+        .event-log p {
+            margin: 5px 0;
+            border-bottom: 1px solid #34495e;
+            padding: 5px;
+        }
+        
+        button, .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+        
+        button:hover, .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+        }
+        
+        input, textarea, select {
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            width: 100%;
+            font-size: 14px;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .product-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .product-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+        
+        .cart {
+            background: #e8f4f8;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+        
+        .cart-item {
+            background: white;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .mouse-tracker {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-family: monospace;
+        }
+        
+        .key-press-demo {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .live-counter {
+            font-size: 36px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        @media (max-width: 768px) {
+            .events-demo {
+                grid-template-columns: 1fr;
+            }
+            .header h1 {
+                font-size: 32px;
+            }
+        }
+        
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            z-index: 1000;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+<body>
+
+<div class="scroll-indicator" id="scrollIndicator"></div>
+
+<div class="container">
+    <div class="header">
+        <h1>🎯 Event Handling Mechanisms</h1>
+        <p>Experiment 7 | Demonstrating various JavaScript events for Personal & E-commerce Website</p>
+    </div>
+    
+    <div class="events-demo">
+        
+        <!-- Exercise 1: Personal Website Events -->
+        <div class="event-card">
+            <h2>📝 Exercise 1: Personal Website Events</h2>
+            
+            <!-- Mouse Events -->
+            <h3>🖱️ Mouse Events</h3>
+            <div class="demo-area">
+                <div class="interactive-element" 
+                     onmouseover="logEvent('Mouse Over - Welcome message displayed')"
+                     onmouseout="logEvent('Mouse Out - Welcome message hidden')"
+                     onclick="logEvent('Click - Element clicked!')"
+                     ondblclick="logEvent('Double Click - Element double clicked!')">
+                    Hover, Click, or Double-click me!
+                </div>
+            </div>
+            
+            <!-- Keyboard Events -->
+            <h3>⌨️ Keyboard Events</h3>
+            <div class="demo-area">
+                <input type="text" 
+                       id="keyInput" 
+                       placeholder="Type something here..."
+                       onkeydown="logEvent('Key Down: ' + event.key)"
+                       onkeyup="logEvent('Key Up: ' + event.key)"
+                       onkeypress="logEvent('Key Press: ' + event.key)">
+                <div id="liveTyping" style="margin-top: 10px; color: #666;"></div>
+            </div>
+            
+            <!-- Form Events -->
+            <h3>📋 Form Events</h3>
+            <div class="demo-area">
+                <input type="text" id="focusInput" placeholder="Focus/Blur event demo"
+                       onfocus="logEvent('Focus - Input field focused')"
+                       onblur="logEvent('Blur - Input field lost focus')">
+                
+                <select id="selectDemo" onchange="logEvent('Change - Selected option: ' + this.value)">
+                    <option value="">Select an option</option>
+                    <option value="Option 1">Option 1</option>
+                    <option value="Option 2">Option 2</option>
+                    <option value="Option 3">Option 3</option>
+                </select>
+                
+                <form onsubmit="event.preventDefault(); logEvent('Submit - Form submitted');">
+                    <input type="text" placeholder="Sample field">
+                    <button type="submit">Submit Form</button>
+                </form>
+            </div>
+            
+            <!-- Window Events -->
+            <h3>🪟 Window Events</h3>
+            <div class="demo-area">
+                <button onclick="logEvent('Load - Page loaded (simulated)')">Simulate Load Event</button>
+                <button onclick="logEvent('Resize - Window resized to ' + window.innerWidth + 'px')">Check Window Size</button>
+                <button onclick="logEvent('Scroll - User scrolled to position')">Check Scroll Position</button>
+            </div>
+            
+            <!-- Event Log -->
+            <h3>📜 Event Log</h3>
+            <div class="event-log" id="eventLog1">
+                <p>Events will appear here...</p>
+            </div>
+            <button onclick="clearEventLog('eventLog1')" style="margin-top: 10px;">Clear Log</button>
+        </div>
+        
+        <!-- Exercise 2: E-commerce Website Events -->
+        <div class="event-card">
+            <h2>🛍️ Exercise 2: E-commerce Website Events</h2>
+            
+            <!-- Product Click Events -->
+            <h3>🛒 Product Selection Events</h3>
+            <div class="product-grid" id="productGrid">
+                <div class="product-item" onclick="addToCart('💄 Matte Lipstick', 499)" onmouseenter="logEvent('Hover - Matte Lipstick')">
+                    💄<br>Matte Lipstick<br>₹499
+                </div>
+                <div class="product-item" onclick="addToCart('🧴 Foundation', 899)" onmouseenter="logEvent('Hover - Foundation')">
+                    🧴<br>Foundation<br>₹899
+                </div>
+                <div class="product-item" onclick="addToCart('✏️ Kajal', 199)" onmouseenter="logEvent('Hover - Kajal')">
+                    ✏️<br>Kajal<br>₹199
+                </div>
+                <div class="product-item" onclick="addToCart('🎨 Eyeshadow', 699)" onmouseenter="logEvent('Hover - Eyeshadow Palette')">
+                    🎨<br>Eyeshadow<br>₹699
+                </div>
+            </div>
+            
+            <!-- Shopping Cart -->
+            <div class="cart" id="shoppingCart">
+                <strong>🛒 Your Cart:</strong>
+                <div id="cartItems">No items added yet</div>
+                <div id="cartTotal" style="margin-top: 10px; font-weight: bold;">Total: ₹0</div>
+            </div>
+            
+            <!-- Quantity Events -->
+            <h3>📦 Quantity & Stock Events</h3>
+            <div class="demo-area">
+                <label>Product Quantity:</label>
+                <input type="number" id="quantity" value="1" min="1" max="10"
+                       onchange="logEvent('Quantity changed to: ' + this.value)"
+                       oninput="updateQuantityDisplay(this.value)">
+                <div id="quantityDisplay">Current quantity: 1</div>
+            </div>
+            
+            <!-- Drag and Drop Events -->
+            <h3>🖱️ Drag & Drop Events</h3>
+            <div class="demo-area">
+                <div draggable="true" 
+                     ondragstart="dragStart(event)" 
+                     ondragend="logEvent('Drag End - Dragging stopped')"
+                     style="background: #667eea; color: white; padding: 10px; border-radius: 10px; cursor: move;">
+                    📦 Drag me to cart!
+                </div>
+                <div id="dropZone" 
+                     ondragover="dragOver(event)" 
+                     ondrop="drop(event)"
+                     style="background: #e8f4f8; padding: 20px; border-radius: 10px; margin-top: 15px; text-align: center;">
+                    🎯 Drop Zone (Drop dragged item here)
+                </div>
+            </div>
+            
+            <!-- Form Validation Events -->
+            <h3>✅ Form Validation Events</h3>
+            <div class="demo-area">
+                <form id="checkoutForm" onsubmit="return validateCheckout(event)">
+                    <input type="text" id="customerName" placeholder="Full Name" 
+                           onblur="validateName()"
+                           onfocus="logEvent('Focus - Name field')">
+                    <div id="nameError" style="color: red; font-size: 12px;"></div>
+                    
+                    <input type="email" id="customerEmail" placeholder="Email"
+                           onblur="validateEmail()">
+                    <div id="emailError" style="color: red; font-size: 12px;"></div>
+                    
+                    <button type="submit">Place Order</button>
+                </form>
+            </div>
+            
+            <!-- Live Search Events -->
+            <h3>🔍 Live Search Events</h3>
+            <div class="demo-area">
+                <input type="text" id="searchBox" placeholder="Search products..." 
+                       onkeyup="liveSearch(this.value)"
+                       onfocus="logEvent('Focus - Search box')">
+                <div id="searchResults" style="margin-top: 10px;"></div>
+            </div>
+            
+            <!-- Event Log for E-commerce -->
+            <h3>📜 E-commerce Event Log</h3>
+            <div class="event-log" id="eventLog2">
+                <p>E-commerce events will appear here...</p>
+            </div>
+            <button onclick="clearEventLog('eventLog2')" style="margin-top: 10px;">Clear Log</button>
+        </div>
+        
+    </div>
+    
+    <!-- Additional Interactive Demo -->
+    <div class="event-card" style="margin-top: 0;">
+        <h2>🎮 Interactive Event Demo Gallery</h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+            
+            <!-- Mouse Movement Tracker -->
+            <div>
+                <h3>📍 Mouse Movement</h3>
+                <div class="mouse-tracker" id="mouseTracker" 
+                     onmousemove="trackMouse(event)"
+                     onmouseleave="logEvent('Mouse left the tracker area')">
+                    Move mouse here<br>
+                    <span id="mouseCoords">X: 0, Y: 0</span>
+                </div>
+            </div>
+            
+            <!-- Click Counter -->
+            <div>
+                <h3>🖱️ Click Counter</h3>
+                <div class="demo-area">
+                    <div class="live-counter" id="clickCounter">0</div>
+                    <button onclick="incrementClick()">Click Me!</button>
+                    <button onclick="resetClickCounter()">Reset</button>
+                </div>
+            </div>
+            
+            <!-- Hover Effects -->
+            <div>
+                <h3>✨ Hover Effects</h3>
+                <div class="demo-area">
+                    <div class="interactive-element" 
+                         onmouseenter="logEvent('Mouse Enter - Button hover start')"
+                         onmouseleave="logEvent('Mouse Leave - Button hover end')">
+                        Hover over me!
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Copy/Paste Events -->
+            <div>
+                <h3>📋 Copy/Paste Events</h3>
+                <div class="demo-area">
+                    <input type="text" placeholder="Copy/Paste text here"
+                           oncopy="logEvent('Copy - Text copied')"
+                           onpaste="logEvent('Paste - Text pasted')"
+                           oncut="logEvent('Cut - Text cut')">
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+    <!-- Event Summary Table -->
+    <div class="event-card">
+        <h2>📊 Event Handling Summary</h2>
+        
+        <style>
+            .event-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 15px;
+            }
+            
+            .event-table th, .event-table td {
+                padding: 12px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+            
+            .event-table th {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+            }
+            
+            .event-table tr:hover {
+                background: #f5f5f5;
+            }
+        </style>
+        
+        <table class="event-table">
+            <thead>
+                <tr>
+                    <th>Event Type</th>
+                    <th>Event Name</th>
+                    <th>Description</th>
+                    <th>Exercise Used</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Mouse</td><td>onclick, ondblclick</td><td>Single/Double click detection</td><td>Ex 1 & 2</td></tr>
+                <tr><td>Mouse</td><td>onmouseover, onmouseout</td><td>Hover effects</td><td>Ex 1 & 2</td></tr>
+                <tr><td>Keyboard</td><td>onkeydown, onkeyup, onkeypress</td><td>Key press detection</td><td>Ex 1</td></tr>
+                <tr><td>Form</td><td>onfocus, onblur</td><td>Input field focus events</td><td>Ex 1 & 2</td></tr>
+                <tr><td>Form</td><td>onchange, onsubmit</td><td>Form change/submit events</td><td>Ex 1 & 2</td></tr>
+                <tr><td>Window</td><td>onload, onresize, onscroll</td><td>Window events</td><td>Ex 1</td></tr>
+                <tr><td>Drag & Drop</td><td>ondragstart, ondrop, ondragover</td><td>Drag and drop functionality</td><td>Ex 2</td></tr>
+                <tr><td>Input</td><td>oninput</td><td>Live input tracking</td><td>Ex 2</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // Global variables
+    let cart = [];
+    let clickCount = 0;
+    
+    // Logging function for Exercise 1
+    function logEvent(message, logId = 'eventLog1') {
+        const logContainer = document.getElementById(logId);
+        const timestamp = new Date().toLocaleTimeString();
+        const logEntry = document.createElement('p');
+        logEntry.innerHTML = `[${timestamp}] ${message}`;
+        logContainer.appendChild(logEntry);
+        logContainer.scrollTop = logContainer.scrollHeight;
+        
+        // Also log to console for debugging
+        console.log(`[${timestamp}] ${message}`);
+    }
+    
+    // Clear event log
+    function clearEventLog(logId) {
+        const logContainer = document.getElementById(logId);
+        logContainer.innerHTML = '<p>Log cleared...</p>';
+        setTimeout(() => {
+            logContainer.innerHTML = '<p>Events will appear here...</p>';
+        }, 1000);
+    }
+    
+    // Live typing display
+    document.getElementById('keyInput')?.addEventListener('keyup', function(e) {
+        document.getElementById('liveTyping').innerHTML = `You typed: ${this.value}`;
+    });
+    
+    // E-commerce: Add to cart
+    function addToCart(productName, price) {
+        cart.push({ name: productName, price: price });
+        updateCartDisplay();
+        logEvent(`Added to cart: ${productName} - ₹${price}`, 'eventLog2');
+        
+        // Visual feedback
+        const product = event.target.closest('.product-item');
+        if (product) {
+            product.style.transform = 'scale(1.05)';
+            setTimeout(() => {
+                product.style.transform = 'scale(1)';
+            }, 300);
+        }
+    }
+    
+    // Update cart display
+    function updateCartDisplay() {
+        const cartContainer = document.getElementById('cartItems');
+        const totalContainer = document.getElementById('cartTotal');
+        
+        if (cart.length === 0) {
+            cartContainer.innerHTML = 'No items added yet';
+            totalContainer.innerHTML = 'Total: ₹0';
+            return;
+        }
+        
+        let cartHTML = '';
+        let total = 0;
+        
+        cart.forEach((item, index) => {
+            cartHTML += `<div class="cart-item">
+                            ${item.name} - ₹${item.price}
+                            <button onclick="removeFromCart(${index})" style="background: #ff4757; padding: 2px 8px;">❌</button>
+                         </div>`;
+            total += item.price;
+        });
+        
+        cartContainer.innerHTML = cartHTML;
+        totalContainer.innerHTML = `Total: ₹${total}`;
+        logEvent(`Cart updated - Total: ₹${total}`, 'eventLog2');
+    }
+    
+    // Remove from cart
+    function removeFromCart(index) {
+        const removed = cart.splice(index, 1)[0];
+        updateCartDisplay();
+        logEvent(`Removed from cart: ${removed.name}`, 'eventLog2');
+    }
+    
+    // Update quantity display
+    function updateQuantityDisplay(value) {
+        document.getElementById('quantityDisplay').innerHTML = `Current quantity: ${value}`;
+        logEvent(`Quantity updated to ${value}`, 'eventLog2');
+    }
+    
+    // Drag and drop functions
+    function dragStart(event) {
+        event.dataTransfer.setData("text", "Dragged Item");
+        logEvent('Drag Start - Item being dragged', 'eventLog2');
+    }
+    
+    function dragOver(event) {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = "copy";
+    }
+    
+    function drop(event) {
+        event.preventDefault();
+        const data = event.dataTransfer.getData("text");
+        logEvent(`Drop - Item dropped in cart: ${data}`, 'eventLog2');
+        
+        // Add to cart when dropped
+        addToCart("Dragged Product", 299);
+    }
+    
+    // Form validation
+    function validateName() {
+        const name = document.getElementById('customerName').value;
+        const errorDiv = document.getElementById('nameError');
+        
+        if (name.length < 3) {
+            errorDiv.innerHTML = 'Name must be at least 3 characters';
+            logEvent('Validation Error - Name too short', 'eventLog2');
+            return false;
+        } else {
+            errorDiv.innerHTML = '';
+            return true;
+        }
+    }
+    
+    function validateEmail() {
+        const email = document.getElementById('customerEmail').value;
+        const errorDiv = document.getElementById('emailError');
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        
+        if (!emailRegex.test(email)) {
+            errorDiv.innerHTML = 'Enter a valid email address';
+            logEvent('Validation Error - Invalid email', 'eventLog2');
+            return false;
+        } else {
+            errorDiv.innerHTML = '';
+            return true;
+        }
+    }
+    
+    function validateCheckout(event) {
+        event.preventDefault();
+        const isNameValid = validateName();
+        const isEmailValid = validateEmail();
+        
+        if (isNameValid && isEmailValid) {
+            logEvent('Form Submitted Successfully - Order placed!', 'eventLog2');
+            alert('Order placed successfully! 🎉');
+            document.getElementById('checkoutForm').reset();
+            return true;
+        } else {
+            logEvent('Form Submission Failed - Validation errors', 'eventLog2');
+            alert('Please fix validation errors');
+            return false;
+        }
+    }
+    
+    // Live search
+    const products = ['Matte Lipstick', 'Foundation', 'Kajal', 'Eyeshadow', 'Mascara', 'Compact Powder', 'Lip Gloss', 'Nail Polish'];
+    
+    function liveSearch(query) {
+        const results = products.filter(product => 
+            product.toLowerCase().includes(query.toLowerCase())
+        );
+        
+        const resultsDiv = document.getElementById('searchResults');
+        
+        if (query === '') {
+            resultsDiv.innerHTML = '';
+            return;
+        }
+        
+        if (results.length > 0) {
+            resultsDiv.innerHTML = results.map(product => 
+                `<div style="padding: 5px; border-bottom: 1px solid #ddd;">🔍 ${product}</div>`
+            ).join('');
+            logEvent(`Search - Found ${results.length} results for "${query}"`, 'eventLog2');
+        } else {
+            resultsDiv.innerHTML = '<div>No products found</div>';
+            logEvent(`Search - No results for "${query}"`, 'eventLog2');
+        }
+    }
+    
+    // Mouse tracking
+    function trackMouse(event) {
+        const x = event.offsetX;
+        const y = event.offsetY;
+        document.getElementById('mouseCoords').innerHTML = `X: ${x}, Y: ${y}`;
+    }
+    
+    // Click counter
+    function incrementClick() {
+        clickCount++;
+        document.getElementById('clickCounter').innerHTML = clickCount;
+        logEvent(`Button clicked - Total clicks: ${clickCount}`, 'eventLog1');
+    }
+    
+    function resetClickCounter() {
+        clickCount = 0;
+        document.getElementById('clickCounter').innerHTML = '0';
+        logEvent('Click counter reset', 'eventLog1');
+    }
+    
+    // Scroll indicator
+    window.addEventListener('scroll', function() {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        document.getElementById('scrollIndicator').style.width = scrolled + '%';
+    });
+    
+    // Window resize event
+    window.addEventListener('resize', function() {
+        logEvent(`Window resized to ${window.innerWidth}x${window.innerHeight}`, 'eventLog1');
+    });
+    
+    // Page load complete
+    window.addEventListener('load', function() {
+        logEvent('Page fully loaded - All event handlers ready!', 'eventLog1');
+    });
+    
+    // Right click prevention demo
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        logEvent('Right click prevented - Context menu disabled', 'eventLog1');
+        return false;
+    });
+    
+    // Welcome message on page load
+    setTimeout(() => {
+        logEvent('✨ Welcome to Event Handling Demo! Try clicking, hovering, typing, and more! ✨', 'eventLog1');
+        logEvent('🛍️ E-commerce events ready! Try adding products to cart!', 'eventLog2');
+    }, 1000);
+</script>
+
+</body>
+</html>
